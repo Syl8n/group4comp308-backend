@@ -17,6 +17,7 @@ pipeline {
           git url: "$REPO",
               branch: "$BRANCH",
               credentialsId: "$GIT_ID"
+          sh "ls -al"
         }
         post {
           success {

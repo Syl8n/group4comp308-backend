@@ -1,7 +1,6 @@
 pipeline {
-  agent any
-  options {
-    timeout(time: 1, unit: 'HOURS')
+  agent {
+    label 'backend'
   }
   environment {
     GIT_ID = '376d87d3-5d76-42bd-b654-4c094cb91809'
@@ -17,7 +16,8 @@ pipeline {
           git url: "$REPO",
               branch: "$BRANCH",
               credentialsId: "$GIT_ID"
-          sh "ls -al"
+          sh 'ls -al'
+          sh 'ls ..'
         }
         post {
           success {
@@ -25,6 +25,19 @@ pipeline {
           }
           failure {
             error 'fail: check out'
+          }
+        }
+      }
+      stage('build') {
+        steps {
+          echo 'build stage'
+        }
+        post {
+          success {
+            echo 'success: build'
+          }
+          failure {
+            error 'fail: build'
           }
         }
       }

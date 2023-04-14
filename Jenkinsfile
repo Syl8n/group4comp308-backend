@@ -7,7 +7,6 @@ pipeline {
     IMAGE = 'group4comp308-backend'
     VERSION_ID = '0'
     DOCKERHUB_ID = 'yaaloo'
-    dockerImage = ''
   }
   stages {
       stage('init') {
@@ -42,7 +41,7 @@ pipeline {
       // }
       steps {
         echo 'build stage'
-        dockerImage = docker.build "${DOCKERHUB_ID}/${IMAGE}:${VERSION_ID}.${env.BUILD_NUMBER}"
+        docker.build "${DOCKERHUB_ID}/${IMAGE}:${VERSION_ID}.${BUILD_NUMBER}"
       }
       post {
         success {
@@ -59,9 +58,7 @@ pipeline {
         withCredentials([string(credentialsId: 'dockerhub', variable: 'dockerhubPwd')]) {
           sh "docker login -u ${DOCKERHUB_ID} -p ${dockerhubPwd}"
         }
-        script {
-          dockerImage.push()
-        }
+        sh 'docker push $DOCKERHUB_ID/$IMAGE:$VERSION_ID.$BUILD_NUMBER'
       }
       post {
         success {

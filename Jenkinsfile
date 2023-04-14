@@ -1,7 +1,7 @@
 pipeline {
   agent none
   environment {
-    GIT_ID = '376d87d3-5d76-42bd-b654-4c094cb91809'
+    GIT_ID = 'github'
     REPO = 'https://github.com/group4comp308/group4comp308-backend.git'
     BRANCH = 'main'
     IMAGE = 'group4comp308-backend'

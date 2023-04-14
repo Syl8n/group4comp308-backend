@@ -37,7 +37,7 @@ pipeline {
     stage('build') {
       agent {
         dockerfile {
-          additionalBuildArgs '--build-arg version=' + VERSIONID + '.' + BUILD_NUMBER
+          additionalBuildArgs '--build-arg version=' + VERSION_ID + '.' + BUILD_NUMBER
         }
       }
       steps {

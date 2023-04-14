@@ -41,7 +41,8 @@ pipeline {
       // }
       steps {
         echo 'build stage'
-        docker.build "${DOCKERHUB_ID}/${IMAGE}:${VERSION_ID}.${BUILD_NUMBER}"
+        sh 'docker build . $DOCKERHUB_ID/$IMAGE:$VERSION_ID.$BUILD_NUMBER'
+        // docker.build "${DOCKERHUB_ID}/${IMAGE}:${VERSION_ID}.${BUILD_NUMBER}"
       }
       post {
         success {

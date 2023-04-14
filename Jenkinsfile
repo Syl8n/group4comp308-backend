@@ -9,8 +9,11 @@ pipeline {
   }
   stages {
       stage('init') {
-        echo "Build id: $BUILD_ID"
-        echo "Build number: $BUILD_NUMBER"
+        agent any
+        steps {
+          echo "Build id: $BUILD_ID"
+          echo "Build number: $BUILD_NUMBER"
+        }
       }
       stage('check out') {
         agent any
@@ -30,23 +33,23 @@ pipeline {
           }
         }
       }
-      // stage('build') {
-      //   agent {
-      //     dockerfile{
-      //       additionalBuildArgs  '--build-arg version=1.0.2'
-      //     }
-      //   }
-      //   steps {
-      //     echo 'build stage'
-      //   }
-      //   post {
-      //     success {
-      //       echo 'success: build'
-      //     }
-      //     failure {
-      //       error 'fail: build'
-      //     }
-      //   }
-      // }
+  // stage('build') {
+  //   agent {
+  //     dockerfile{
+  //       additionalBuildArgs  '--build-arg version=1.0.2'
+  //     }
+  //   }
+  //   steps {
+  //     echo 'build stage'
+  //   }
+  //   post {
+  //     success {
+  //       echo 'success: build'
+  //     }
+  //     failure {
+  //       error 'fail: build'
+  //     }
+  //   }
+  // }
   }
 }

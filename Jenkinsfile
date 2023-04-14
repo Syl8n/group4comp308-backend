@@ -5,8 +5,9 @@ pipeline {
     REPO = 'https://github.com/group4comp308/group4comp308-backend.git'
     BRANCH = 'main'
     IMAGE = 'group4comp308-backend'
-    CONTAINER = 'group4comp308-backend'
     VERSION_ID = '0'
+    DOCKERHUB_ID = 'yaaloo'
+    dockerImage = ''
   }
   stages {
       stage('init') {
@@ -30,27 +31,45 @@ pipeline {
             echo 'success: check out'
           }
           failure {
-            error 'fail: check out'
+            error 'failure: check out'
           }
         }
       }
     stage('build') {
-      agent {
-        dockerfile {
-          additionalBuildArgs '--build-arg version=' + VERSION_ID + '.' + BUILD_NUMBER
-        }
-      }
+      agent any
+      // dockerfile {
+      //   additionalBuildArgs '--build-arg version=' + VERSION_ID + '.' + BUILD_NUMBER
+      // }
       steps {
         echo 'build stage'
+        dockerImage = docker.build "${DOCKERHUB_ID}/${IMAGE}:${VERSION_ID}.${env.BUILD_NUMBER}"
       }
       post {
         success {
           echo 'success: build'
         }
         failure {
-          error 'fail: build'
+          error 'failure: build'
+        }
+      }
+    }
+    stage('push') {
+      agent any
+      steps {
+        withCredentials([string(credentialsId: 'dockerhub', variable: 'dockerhubPwd')]) {
+          sh "docker login -u ${DOCKERHUB_ID} -p ${dockerhubPwd}"
+        }
+        dockerImage.push()
+      }
+      post {
+        success {
+          echo 'success: push'
+        }
+        failure {
+          error 'failure: push'
         }
       }
     }
   }
 }
+

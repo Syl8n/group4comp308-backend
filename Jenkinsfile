@@ -6,6 +6,7 @@ pipeline {
     BRANCH = 'main'
     IMAGE = 'group4comp308-backend'
     CONTAINER = 'group4comp308-backend'
+    VERSION_ID = '0'
   }
   stages {
       stage('init') {
@@ -33,23 +34,23 @@ pipeline {
           }
         }
       }
-  // stage('build') {
-  //   agent {
-  //     dockerfile{
-  //       additionalBuildArgs  '--build-arg version=1.0.2'
-  //     }
-  //   }
-  //   steps {
-  //     echo 'build stage'
-  //   }
-  //   post {
-  //     success {
-  //       echo 'success: build'
-  //     }
-  //     failure {
-  //       error 'fail: build'
-  //     }
-  //   }
-  // }
+    stage('build') {
+      agent {
+        dockerfile {
+          additionalBuildArgs '--build-arg version=' + VERSIONID + '.' + BUILD_NUMBER
+        }
+      }
+      steps {
+        echo 'build stage'
+      }
+      post {
+        success {
+          echo 'success: build'
+        }
+        failure {
+          error 'fail: build'
+        }
+      }
+    }
   }
 }

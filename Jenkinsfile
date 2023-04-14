@@ -59,7 +59,9 @@ pipeline {
         withCredentials([string(credentialsId: 'dockerhub', variable: 'dockerhubPwd')]) {
           sh "docker login -u ${DOCKERHUB_ID} -p ${dockerhubPwd}"
         }
-        dockerImage.push()
+        script {
+          dockerImage.push()
+        }
       }
       post {
         success {

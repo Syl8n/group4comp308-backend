@@ -5,8 +5,6 @@ const config = require('./config');
 
 module.exports = function (app) {
 
-  console.log(config);
-
   app.use(session({
     key: 'sessionId',
     secret: config.sessionSecret,

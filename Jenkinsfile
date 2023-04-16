@@ -4,18 +4,14 @@ pipeline {
     GIT_ID = 'github'
     REPO = 'https://github.com/group4comp308/group4comp308-backend.git'
     BRANCH = 'main'
-    IMAGE = 'group4comp308-backend'
+    PROJECT_NAME = 'group4comp308-backend'
     VERSION_ID = '0'
-    DOCKERHUB_ID = 'yaaloo'
+    DOCKERHUB_ID = credentials('dockerhub-id')
+    IMAGE_NAME = "${DOCKERHUB_ID}/${PROJECT_NAME}"
+    IMAGE_TAG = "${VERSION_ID}.${BUILD_NUMBER}"
+    SERVER_HOST = credentials('server-host')
   }
   stages {
-      stage('init') {
-        agent any
-        steps {
-          echo "Build id: $BUILD_ID"
-          echo "Build number: $BUILD_NUMBER"
-        }
-      }
       stage('check out') {
         agent any
         steps {
@@ -36,13 +32,9 @@ pipeline {
       }
     stage('build') {
       agent any
-      // dockerfile {
-      //   additionalBuildArgs '--build-arg version=' + VERSION_ID + '.' + BUILD_NUMBER
-      // }
       steps {
-        echo 'build stage'
-        sh 'docker build . -t $DOCKERHUB_ID/$IMAGE:$VERSION_ID.$BUILD_NUMBER'
-        // docker.build "${DOCKERHUB_ID}/${IMAGE}:${VERSION_ID}.${BUILD_NUMBER}"
+        echo 'building image...'
+        sh 'docker build . -t $IMAGE_NAME:$IMAGE_TAG'
       }
       post {
         success {
@@ -56,10 +48,11 @@ pipeline {
     stage('push') {
       agent any
       steps {
+        echo 'pushing image...'
         withCredentials([string(credentialsId: 'dockerhub', variable: 'dockerhubPwd')]) {
-          sh "docker login -u ${DOCKERHUB_ID} -p ${dockerhubPwd}"
+          sh 'echo $dockerhubPwd | docker login -u $DOCKERHUB_ID --password-stdin'
         }
-        sh 'docker push $DOCKERHUB_ID/$IMAGE:$VERSION_ID.$BUILD_NUMBER'
+        sh 'docker push $IMAGE_NAME:$IMAGE_TAG'
       }
       post {
         success {
@@ -70,6 +63,58 @@ pipeline {
         }
       }
     }
+    stage('pull') {
+      agent any
+      steps {
+        echo 'pulling image...'
+        sshagent(['server']) {
+            sh 'ssh -o StrictHostKeyChecking=no $SERVER_HOST mkdir -p $PROJECT_NAME'
+            sh 'ssh -o StrictHostKeyChecking=no $SERVER_HOST docker pull $IMAGE_NAME:$IMAGE_TAG'
+        }
+      }
+      post {
+        success {
+          echo 'success: pull'
+        }
+        failure {
+          error 'failure: pull'
+        }
+      }
+    }
+    stage('clean') {
+      agent any
+      steps {
+        echo 'cleaning container...'
+        sshagent(['server']) {
+            sh 'ssh -o StrictHostKeyChecking=no $SERVER_HOST "docker ps -aq --filter name=${PROJECT_NAME} | grep -q . && docker rm -f ${PROJECT_NAME} || true"'
+        }
+      }
+      post {
+        success {
+          echo 'success: clean'
+        }
+        failure {
+          error 'failure: clean'
+        }
+      }
+    }
+    stage('deploy') {
+      agent any
+      steps {
+        echo 'running container...'
+        sshagent(['server']) {
+            echo '$IMAGE'
+            sh 'ssh -o StrictHostKeyChecking=no $SERVER_HOST docker run -d --name $PROJECT_NAME -p 5000:5000 $IMAGE_NAME:$IMAGE_TAG'
+        }
+      }
+      post {
+        success {
+          echo 'success: deploy'
+        }
+        failure {
+          error 'failure: deploy'
+        }
+      }
+    }
   }
 }
-

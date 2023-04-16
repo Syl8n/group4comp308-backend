@@ -56,6 +56,7 @@ pipeline {
       }
       post {
         success {
+          sh 'docker rmi $IMAGE_NAME:$IMAGE_TAG'
           echo 'success: push'
         }
         failure {
@@ -104,7 +105,8 @@ pipeline {
         echo 'running container...'
         sshagent(['server']) {
             echo '$IMAGE'
-            sh 'ssh -o StrictHostKeyChecking=no $SERVER_HOST docker run -d --name $PROJECT_NAME -p 5000:5000 $IMAGE_NAME:$IMAGE_TAG'
+            sh 'ssh -o StrictHostKeyChecking=no $SERVER_HOST cd $PROJECT_NAME'
+            sh 'ssh -o StrictHostKeyChecking=no $SERVER_HOST docker run -d --name $PROJECT_NAME --env-file env.list -p 5000:5000 $IMAGE_NAME:$IMAGE_TAG'
         }
       }
       post {

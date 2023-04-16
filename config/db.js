@@ -2,17 +2,22 @@ const config = require('./config');
 const mongoose = require('mongoose');
 
 module.exports = function() {
-	const db = mongoose.connect(config.dbUri, {
+	let db;
+  mongoose.connect(config.dbUrl, {
 		useUnifiedTopology: true,
 		useNewUrlParser: true
 		})
-		.then(() => console.log('DB Connected!'))
+		.then(() => {
+      console.log('DB Connected!')
+    })
 		.catch(err => {
 			console.log(err);
 		});
 
-	// require('../model/Nurse');
-	// require('../model/Patient');
+	require('../app/models/Member');
+	require('../app/models/VitalSign');
+	require('../app/models/Tip');
+	require('../app/models/EmergencyAlert');
 
 	return db;
 };

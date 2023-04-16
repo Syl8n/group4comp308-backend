@@ -27,22 +27,23 @@ const schema = new Schema({
   },
   role: {
     type: String,
-    enum: ['nurse', 'patient'],
+    enum: ['NURSE', 'PATIENT'],
     required: true
   }
 });
 
-schema.virtual('fullname').get(() => {
+schema.virtual('fullname').get(function() {
   return `${this.firstname} ${this.lastname}`;
 });
 
-schema.pre('save', (next) => {
-  if (this.isModified('password')) {
+schema.pre('save', function(next) {
+  var member = this
+  if (member.isModified('password')) {
     bcrypt.genSalt(saltRounds, function (err, salt) {
       if (err) return next(err)
-      bcrypt.hash(this.password, salt, function (err, hash) {
+      bcrypt.hash(member.password, salt, function (err, hash) {
         if (err) return next(err)
-        this.password = hash
+        member.password = hash
         next()
       })
     })
@@ -51,7 +52,7 @@ schema.pre('save', (next) => {
   }
 })
 
-schema.methods.comparePassword = (plain, next) => {
+schema.methods.comparePassword = function(plain, next) {
   bcrypt.compare(plain, this.password, function(err, same){
       if(err) return next(err)
       next(null, same)

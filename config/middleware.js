@@ -5,9 +5,7 @@ const compression = require('compression');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
-module.exports = function () {
-
-  const app = express();
+module.exports = function (app) {
 
   app.use(cors());
   app.use(helmet());

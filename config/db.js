@@ -18,6 +18,7 @@ module.exports = function() {
 	require('../app/models/VitalSign');
 	require('../app/models/Tip');
 	require('../app/models/EmergencyAlert');
+  require('../app/models/Checklist');
 
 	return db;
 };

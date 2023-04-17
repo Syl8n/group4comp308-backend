@@ -14,6 +14,7 @@ const typeDefs = gql`
       respiratoryRateMin: Int
       member: Member
       writer: Member
+      createdAt: Date
     }
     input VitalSignInput{
       temperature: Float
@@ -29,7 +30,9 @@ const typeDefs = gql`
 const resolvers = {
   Query: {
     getVitalSigns: async (parent, args) => {
-      const vitalSigns = await VitalSign.find({ member: args._id }).populate('member').sort({ _id: -1 }).exec();
+      const vitalSigns = args.number == 0 ? 
+        await VitalSign.find({ member: args._id }).populate('member').sort({ _id: -1 }).exec()
+        : await VitalSign.find({ member: args._id }).populate('member').sort({ _id: -1 }).limit(args.number).exec();
       return vitalSigns;
     },
   },

@@ -9,18 +9,26 @@ const start = async () => {
   const mutations = require('./app/graphql/mutations')
   const members = require('./app/graphql/member')
   const enums = require('./app/graphql/enum')
+  const vitalSigns = require('./app/graphql/vitalsign')
 
   const typeDefs = [
     enums,
     queries,
     mutations,
     members.typeDefs,
+    vitalSigns.typeDefs
   ]
   const resolvers = [
     members.resolvers,
+    vitalSigns.resolvers
   ]
 
-  const server = new ApolloServer({ typeDefs, resolvers });
+  const server = new ApolloServer({
+    typeDefs, resolvers, context: async ({ req }) => ({
+      req: req,
+      user: req.user,
+    })
+  });
   await server.start();
 
   const app = require('./config/middleware')(express());

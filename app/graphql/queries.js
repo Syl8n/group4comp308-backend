@@ -8,6 +8,7 @@ const typeDefs = gql`
           role: Role
           ): [Member]
       getMember(_id: ID!): Member
+      getVitalSigns(_id: ID!): [VitalSign]
     }
 `
 

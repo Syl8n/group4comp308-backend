@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/group4comp308/group4comp308-backend#readme",
   "dependencies": {
+    "@apollo/server-plugin-landing-page-graphql-playground": "^4.0.0",
     "apollo-server-express": "^3.12.0",
     "bcrypt": "^5.1.0",
     "body-parser": "^1.20.2",

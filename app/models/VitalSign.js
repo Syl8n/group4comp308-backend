@@ -5,24 +5,31 @@ const schema = new Schema({
   temperature: {
     type: Number
   },
-  heartRate: {
+  heartRateMax: {
     type: Number
   },
-  bloodPressure: {
+  heartRateMin: {
     type: Number
   },
-  respiratoryRate: {
+  bloodPressureMax: {
+    type: Number
+  },
+  bloodPressureMin: {
+    type: Number
+  },
+  respiratoryRateMax: {
+    type: Number
+  },
+  respiratoryRateMin: {
     type: Number
   },
   member: {
     type: Schema.Types.ObjectId,
     ref: 'Member',
-    required: true
   },
   writer: {
     type: Schema.Types.ObjectId,
     ref: 'Member',
-    required: true
   }
 });
 

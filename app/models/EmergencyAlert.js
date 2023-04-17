@@ -8,9 +8,13 @@ const schema = new Schema({
     required: true
   },
   createdAt: {
-    type: Date,
-    required: true
+    type: Date
   }
 });
+
+schema.pre('save', async function(next) {
+  this.createdAt = new Date();
+  next();
+})
 
 module.exports = mongoose.model('EmergencyAlert', schema);

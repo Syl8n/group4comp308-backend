@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const encrypt = require('../utils/encrypt')
 const bcrypt = require('bcrypt')
-const saltRounds = 10
 
 const schema = new Schema({
   username: {
@@ -36,17 +36,15 @@ schema.virtual('fullname').get(function() {
   return `${this.firstname} ${this.lastname}`;
 });
 
-schema.pre('save', function(next) {
+schema.pre('save', async function(next) {
   var member = this
   if (member.isModified('password')) {
-    bcrypt.genSalt(saltRounds, function (err, salt) {
-      if (err) return next(err)
-      bcrypt.hash(member.password, salt, function (err, hash) {
-        if (err) return next(err)
-        member.password = hash
-        next()
-      })
-    })
+    try{
+      member.password = await encrypt(member.password);
+    }catch(err){
+      next(err)
+    }
+    next()
   } else {
     next()
   }

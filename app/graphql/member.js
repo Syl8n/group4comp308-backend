@@ -1,5 +1,7 @@
 const { gql } = require('apollo-server-express')
 const Member = require('../models/Member')
+const objectFilter = require('../utils/object.filter')
+const encrypt = require('../utils/encrypt')
 
 const typeDefs = gql`
     type Member {
@@ -21,7 +23,8 @@ const typeDefs = gql`
 const resolvers = {
   Query: {
     getMembers: async (parent, args) => {
-      const members = await Member.find({ ...args }).exec();
+      const form = objectFilter(args);
+      const members = await Member.find({ ...form }).exec();
       return members;
     },
     getMember: async (parent, args) => {
@@ -48,9 +51,12 @@ const resolvers = {
       return member;
     },
     updateMember: async (parent, args) => {
-      console.log(args)
+      const form = objectFilter(args.form);
+      if(form.password){
+        form.password = await encrypt(form.password)
+      }
       const member = await Member.findOneAndUpdate({ _id: args._id },
-        args.form,
+        form,
         {new: true}
       ).exec();
       if (!member) {

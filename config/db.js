@@ -2,8 +2,11 @@ const config = require('./config');
 const mongoose = require('mongoose');
 
 module.exports = function() {
-	let db;
-  mongoose.connect(config.dbUrl, {
+
+  console.log(process.env.NODE_ENV);
+  console.log(config);
+
+	let db = mongoose.connect(config.dbUrl, {
 		useUnifiedTopology: true,
 		useNewUrlParser: true
 		})

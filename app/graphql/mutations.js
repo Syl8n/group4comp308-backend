@@ -9,6 +9,7 @@ const typeDefs = gql`
         ): Member!
         addVitalSign(form: VitalSignInput): VitalSign
         updateVitalSign(_id: ID, form: VitalSignInput): VitalSign
+        addTip(tip: String): Tip
     }
 `
 

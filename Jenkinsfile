@@ -88,7 +88,6 @@ pipeline {
         echo 'cleaning container...'
         sshagent(['server']) {
             sh 'ssh -o StrictHostKeyChecking=no $SERVER_HOST "docker rm -f ${PROJECT_NAME} || true"'
-            // sh 'ssh -o StrictHostKeyChecking=no $SERVER_HOST "docker ps -aq --filter name=${PROJECT_NAME} | grep -q . && docker rm -f ${PROJECT_NAME} || true"'
         }
       }
       post {
@@ -106,7 +105,7 @@ pipeline {
         echo 'running container...'
         sshagent(['server']) {
             echo '$IMAGE'
-            sh 'ssh -o StrictHostKeyChecking=no $SERVER_HOST docker run -d --name $PROJECT_NAME --env-file $PROJECT_NAME/env.list -p 5000:5000 $IMAGE_NAME:$IMAGE_TAG'
+            sh 'ssh -o StrictHostKeyChecking=no $SERVER_HOST docker run -d --name $PROJECT_NAME --env-file $PROJECT_NAME/env.list -p 4000:4000 $IMAGE_NAME:$IMAGE_TAG'
         }
       }
       post {

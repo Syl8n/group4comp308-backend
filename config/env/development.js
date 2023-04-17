@@ -3,7 +3,7 @@ module.exports = {
     socket: 'mongodb',
     user: 'root',
     password: 1111,
-    host: 'localhost:27017',
+    host: '127.0.0.1',
     database: 'comp308',
     options: ''
   },

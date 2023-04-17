@@ -50,11 +50,8 @@ schema.pre('save', async function(next) {
   }
 })
 
-schema.methods.comparePassword = function(plain, next) {
-  bcrypt.compare(plain, this.password, function(err, same){
-      if(err) return next(err)
-      next(null, same)
-  })
-}
+schema.methods.comparePassword = async function (plain) {
+  return await bcrypt.compare(plain, this.password)
+};
 
 module.exports = mongoose.model('Member', schema);

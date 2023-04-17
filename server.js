@@ -5,25 +5,30 @@ const start = async () => {
   const express = require('express');
   const { ApolloServer } = require('apollo-server-express')
 
+  const { typeDefs: scalarTypeDefs } = require('graphql-scalars');
   const queries = require('./app/graphql/queries')
   const mutations = require('./app/graphql/mutations')
   const members = require('./app/graphql/member')
   const enums = require('./app/graphql/enum')
   const vitalSigns = require('./app/graphql/vitalsign')
   const tips = require('./app/graphql/tip')
+  const emergencyAlerts = require('./app/graphql/emergencyAlert')
 
   const typeDefs = [
+    ...scalarTypeDefs,
     enums,
     queries,
     mutations,
     members.typeDefs,
     vitalSigns.typeDefs,
-    tips.typeDefs
+    tips.typeDefs,
+    emergencyAlerts.typeDefs,
   ]
   const resolvers = [
     members.resolvers,
     vitalSigns.resolvers,
-    tips.resolvers
+    tips.resolvers,
+    emergencyAlerts.resolvers,
   ]
 
   const server = new ApolloServer({

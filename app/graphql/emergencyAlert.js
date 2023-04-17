@@ -12,7 +12,9 @@ const typeDefs = gql`
 const resolvers = {
   Query: {
     getEmergencyAlerts: async (parent, args) => {
-      const emergencyAlerts = await EmergencyAlert.find({}).populate('patient').sort({ _id: -1 }).exec();
+      const emergencyAlerts = args.number == 0 ? 
+      await EmergencyAlert.find({}).populate('patient').sort({ _id: -1 }).exec()
+      : await EmergencyAlert.find({}).populate('patient').sort({ _id: -1 }).limit(args.number).exec();
       return emergencyAlerts;
     },
   },
@@ -20,12 +22,12 @@ const resolvers = {
     addEmergencyAlert: async (parent, args, context) => {
       let patient = context.user;
       console.log(patient)
-      // if(!patient || !patient._id){
-      //   throw new Error('Sign In first')
-      // }
+      if(!patient || !patient._id){
+        throw new Error('Sign In first')
+      }
 
       // test
-      patient = { _id : "643d2a34e1dfdaf39b3d6d53"};
+      // patient = { _id : "643d2a34e1dfdaf39b3d6d53"};
 
       const emergencyAlert = new EmergencyAlert({
         patient: await Member.findOne({ _id: patient._id }).exec()

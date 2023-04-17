@@ -13,6 +13,7 @@ const start = async () => {
   const vitalSigns = require('./app/graphql/vitalsign')
   const tips = require('./app/graphql/tip')
   const emergencyAlerts = require('./app/graphql/emergencyAlert')
+  const checklists = require('./app/graphql/checklist')
 
   const typeDefs = [
     ...scalarTypeDefs,
@@ -23,12 +24,14 @@ const start = async () => {
     vitalSigns.typeDefs,
     tips.typeDefs,
     emergencyAlerts.typeDefs,
+    checklists.typeDefs
   ]
   const resolvers = [
     members.resolvers,
     vitalSigns.resolvers,
     tips.resolvers,
     emergencyAlerts.resolvers,
+    checklists.resolvers
   ]
 
   const server = new ApolloServer({

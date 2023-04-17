@@ -17,6 +17,7 @@ const typeDefs = gql`
         login(username: String!, password: String!):  AuthPayload
         addTip(tip: String): Tip
         addEmergencyAlert: EmergencyAlert
+        addChecklist(form: ChecklistInput): Checklist
     }
 `
 

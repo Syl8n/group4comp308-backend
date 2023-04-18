@@ -106,7 +106,6 @@ pipeline {
         sshagent(['server']) {
             echo '$IMAGE'
             sh 'ssh -o StrictHostKeyChecking=no $SERVER_HOST docker run -d --name $PROJECT_NAME --env-file $PROJECT_NAME/env.list -p 4000:4000 $IMAGE_NAME:$IMAGE_TAG'
-            sh 'ssh -o StrictHostKeyChecking=no $SERVER_HOST docker rmi $IMAGE_NAME:$IMAGE_TAG'
         }
       }
       post {

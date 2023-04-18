@@ -5,10 +5,7 @@ const schema = new Schema({
   temperature: {
     type: Number
   },
-  heartRateMax: {
-    type: Number
-  },
-  heartRateMin: {
+  heartRate: {
     type: Number
   },
   bloodPressureMax: {
@@ -17,11 +14,12 @@ const schema = new Schema({
   bloodPressureMin: {
     type: Number
   },
-  respiratoryRateMax: {
+  respiratoryRate: {
     type: Number
   },
-  respiratoryRateMin: {
-    type: Number
+  date: {
+    type: Date,
+    default: Date.now
   },
   member: {
     type: Schema.Types.ObjectId,

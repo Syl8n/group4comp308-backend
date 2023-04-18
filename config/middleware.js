@@ -4,12 +4,13 @@ const morgan = require('morgan');
 const compression = require('compression');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
 
 module.exports = function (app) {
 
   app.use(cors());
   app.use(helmet());
-
+  app.use(cookieParser());
   if (process.env.NODE_ENV === 'development') {
     app.use(morgan('dev'));
   } else if (process.env.NODE_ENV === 'production') {

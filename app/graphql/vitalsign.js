@@ -6,23 +6,19 @@ const typeDefs = gql`
     type VitalSign {
       _id: ID
       temperature: Float
-      heartRateMax: Int
-      heartRateMin: Int
+      heartRate: Int
       bloodPressureMax: Int
       bloodPressureMin: Int
-      respiratoryRateMax: Int
-      respiratoryRateMin: Int
+      respiratoryRate: Int
       member: Member
       writer: Member
     }
     input VitalSignInput{
       temperature: Float
-      heartRateMax: Int
-      heartRateMin: Int
+      heartRate: Int
       bloodPressureMax: Int
       bloodPressureMin: Int
-      respiratoryRateMax: Int
-      respiratoryRateMin: Int
+      respiratoryRate: Int
       memberId: ID
     }
 `

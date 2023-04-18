@@ -5,7 +5,6 @@ const compression = require('compression');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
-const cookieParser = require('cookie-parser');
 const auth = require('../app/utils/auth')
 
 module.exports = function (app) {
@@ -30,7 +29,7 @@ module.exports = function (app) {
     extended: true
   }));
 
-  require('./session')(app);
+  // require('./session')(app);
 
   app.use('/', auth);
 

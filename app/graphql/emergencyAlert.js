@@ -11,7 +11,13 @@ const typeDefs = gql`
 `
 const resolvers = {
   Query: {
-    getEmergencyAlerts: async (parent, args) => {
+    getEmergencyAlerts: async (parent, args, { req }) => {
+      if(!req.user){
+        throw new Error('Sign In first')
+      }
+      if(req.user.role != 'NURSE'){
+        throw new Error('You are not a nurse')
+      }
       const emergencyAlerts = args.number == 0 ? 
       await EmergencyAlert.find({}).populate('patient').sort({ _id: -1 }).exec()
       : await EmergencyAlert.find({}).populate('patient').sort({ _id: -1 }).limit(args.number).exec();
@@ -19,15 +25,14 @@ const resolvers = {
     },
   },
   Mutation: { 
-    addEmergencyAlert: async (parent, args, context) => {
-      let patient = context.user;
-      console.log(patient)
+    addEmergencyAlert: async (parent, args, { req }) => {
+      const patient = req.user;
       if(!patient || !patient._id){
         throw new Error('Sign In first')
       }
-
-      // test
-      // patient = { _id : "643d2a34e1dfdaf39b3d6d53"};
+      if(patient.role != 'PATIENT'){
+        throw new Error('You are not a patient')
+      }
 
       const emergencyAlert = new EmergencyAlert({
         patient: await Member.findOne({ _id: patient._id }).exec()

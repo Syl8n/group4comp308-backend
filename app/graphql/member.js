@@ -1,7 +1,7 @@
 const { gql } = require('apollo-server-express')
 const Member = require('../models/Member')
-const jwt = require('jsonwebtoken');
-const secret = 'your_jwt_secret';
+// const jwt = require('jsonwebtoken');
+// const secret = 'your_jwt_secret';
 const objectFilter = require('../utils/object.filter')
 const encrypt = require('../utils/encrypt')
 
@@ -66,18 +66,6 @@ const resolvers = {
       }
       return member;
     },
-    login: async (parent, { username, password }) => {
-      const member = await Member.findOne({ username: username }).exec();
-      if (!member) {
-        throw new Error("Invalid username or password");
-      }
-      const validPassword = await member.comparePassword(password);
-      if (!validPassword) {
-        throw new Error("Invalid username or password");
-      }
-      const token = jwt.sign({ id: member._id }, secret, { expiresIn: '1d' });
-      return { member, token };
-    }
   }
 }
 

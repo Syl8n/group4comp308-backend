@@ -45,17 +45,11 @@ const resolvers = {
     },
   },
   Mutation: { 
-    addChecklist: async (parent, args, context) => {
-      const writer = context.user;
-      console.log(writer)
+    addChecklist: async (parent, args, { req }) => {
+      const writer = req.user;
       if(!writer || !writer._id){
         throw new Error('Sign In first')
       }
-
-      //test
-      // const writer = {
-      //   _id: "643d2a34e1dfdaf39b3d6d53"
-      // }
 
       const checklist = new Checklist(
         args.form

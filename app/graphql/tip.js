@@ -9,13 +9,25 @@ const typeDefs = gql`
 `
 const resolvers = {
   Query: {
-    getTip: async (parent, args) => {
+    getTip: async (parent, args, { req }) => {
+      if(!req.user){
+        throw new Error('Sign in first')
+      }
+      if(req.user.role != 'PATIENT'){
+        throw new Error('You are not a patient')
+      }
       const tips = await Tip.find({}).exec();
       return tips[Math.floor(Math.random() * tips.length)];
     },
   },
   Mutation: { 
     addTip: async (parent, args) => {
+      if(!req.user){
+        throw new Error('Sign in first')
+      }
+      if(req.user.role != 'NURSE'){
+        throw new Error('You are not a nurse')
+      }
       const tip = new Tip(
         args
       );

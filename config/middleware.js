@@ -5,6 +5,7 @@ const compression = require('compression');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
 const auth = require('../app/utils/auth')
 
 module.exports = function (app) {
@@ -14,7 +15,7 @@ module.exports = function (app) {
     credentials: true,
   }));
   app.use(helmet());
-
+  app.use(cookieParser());
   if (process.env.NODE_ENV === 'development') {
     app.use(morgan('dev'));
   } else if (process.env.NODE_ENV === 'production') {

@@ -7,5 +7,7 @@ module.exports = {
     database: 'comp308',
     options: ''
   },
-  sessionSecret: 'Comp308Group4GroupAssignmentSessionSecret'
+  sessionSecret: 'Comp308Group4GroupAssignmentSessionSecret',
+  client: 'http://localhost:3000',
+  jwtSecret: 'your_jwt_secret'
 }

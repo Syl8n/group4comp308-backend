@@ -27,6 +27,9 @@ const resolvers = {
         expires: new Date(Date.now() + 24 * 60 * 60 * 1000)
       })
       return { member, token };
+    },
+    logout: async (parent, args, { res }) => {
+      res.clearCookie('token');
     }
   }
 }

@@ -2,28 +2,38 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const schema = new Schema({
-  temperature: {
+  fever: {
     type: Number
   },
-  heartRate: {
+  cough: {
     type: Number
   },
-  bloodPressureMax: {
+  shortnessOfBreath: {
     type: Number
   },
-  bloodPressureMin: {
+  fatigue: {
     type: Number
   },
-  respiratoryRate: {
+  bodyAches: {
     type: Number
   },
-  date: {
-    type: Date,
-    default: Date.now
+  headache: {
+    type: Number
   },
-  member: {
-    type: Schema.Types.ObjectId,
-    ref: 'Member',
+  lossOfTasteOrSmell: {
+    type: Number
+  },
+  soreThroat: {
+    type: Number
+  },
+  congestion: {
+    type: Number
+  },
+  nauseaOrVomiting: {
+    type: Number
+  },
+  diarrhea: {
+    type: Number
   },
   writer: {
     type: Schema.Types.ObjectId,
@@ -39,4 +49,4 @@ schema.pre('save', async function(next) {
   next();
 })
 
-module.exports = mongoose.model('VitalSign', schema);
+module.exports = mongoose.model('Checklist', schema);

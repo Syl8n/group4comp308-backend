@@ -7,5 +7,7 @@ module.exports = {
     database: '',
     options: process.env.DB_OPTIONS
   },
-  sessionSecret: process.env.SESSION_SECRET
+  sessionSecret: process.env.SESSION_SECRET,
+  client: process.env.CLIENT,
+  jwtSecret: process.env.JWT_SECRET
 }

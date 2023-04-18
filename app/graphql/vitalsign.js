@@ -12,6 +12,7 @@ const typeDefs = gql`
       respiratoryRate: Int
       member: Member
       writer: Member
+      createdAt: Date
     }
     input VitalSignInput{
       temperature: Float
@@ -25,14 +26,15 @@ const typeDefs = gql`
 const resolvers = {
   Query: {
     getVitalSigns: async (parent, args) => {
-      const vitalSigns = await VitalSign.find({ member: args._id }).populate('member').sort({ _id: -1 }).exec();
+      const vitalSigns = args.number == 0 ? 
+        await VitalSign.find({ member: args._id }).populate('member').sort({ _id: -1 }).exec()
+        : await VitalSign.find({ member: args._id }).populate('member').sort({ _id: -1 }).limit(args.number).exec();
       return vitalSigns;
     },
   },
   Mutation: { 
-    addVitalSign: async (parent, args, context) => {
-      const writer = context.user;
-      console.log(writer)
+    addVitalSign: async (parent, args, { req }) => {
+      const writer = req.user;
       if(!writer || !writer._id){
         throw new Error('Sign In first')
       }
@@ -53,8 +55,8 @@ const resolvers = {
       
       return vitalSign;
     },
-    updateVitalSign: async (parent, args, context) => {
-      const writer = context.user;
+    updateVitalSign: async (parent, args, { req }) => {
+      const writer = req.user;
       console.log(writer)
       if(!writer || !writer._id){
         throw new Error('Sign In first')

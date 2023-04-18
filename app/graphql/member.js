@@ -1,7 +1,9 @@
 const { gql } = require('apollo-server-express')
 const Member = require('../models/Member')
-const jwt = require('jsonwebtoken');
-const secret = 'your_jwt_secret';
+// const jwt = require('jsonwebtoken');
+// const secret = 'your_jwt_secret';
+const objectFilter = require('../utils/object.filter')
+const encrypt = require('../utils/encrypt')
 
 const typeDefs = gql`
     type Member {
@@ -23,7 +25,8 @@ const typeDefs = gql`
 const resolvers = {
   Query: {
     getMembers: async (parent, args) => {
-      const members = await Member.find({ ...args }).exec();
+      const form = objectFilter(args);
+      const members = await Member.find({ ...form }).exec();
       return members;
     },
     getMember: async (parent, args) => {
@@ -50,9 +53,12 @@ const resolvers = {
       return member;
     },
     updateMember: async (parent, args) => {
-      console.log(args)
+      const form = objectFilter(args.form);
+      if(form.password){
+        form.password = await encrypt(form.password)
+      }
       const member = await Member.findOneAndUpdate({ _id: args._id },
-        args.form,
+        form,
         {new: true}
       ).exec();
       if (!member) {
@@ -60,18 +66,6 @@ const resolvers = {
       }
       return member;
     },
-    login: async (parent, { username, password }) => {
-      const member = await Member.findOne({ username: username }).exec();
-      if (!member) {
-        throw new Error("Invalid username or password");
-      }
-      const validPassword = await member.comparePassword(password);
-      if (!validPassword) {
-        throw new Error("Invalid username or password");
-      }
-      const token = jwt.sign({ id: member._id }, secret, { expiresIn: '1d' });
-      return { member, token };
-    }
   }
 }
 

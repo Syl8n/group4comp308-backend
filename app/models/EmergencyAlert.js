@@ -9,6 +9,16 @@ const schema = new Schema({
   },
   createdAt: {
     type: Date
+  },
+  severity: {
+    type: String,
+    enum: ['MILD', 'SEVERE', 'CRITICAL'],
+    required: true
+  },
+  status: {
+    type: String,
+    enum: ['ACTIVE', 'RESOLVED'],
+    default: 'ACTIVE'
   }
 });
 

@@ -4,5 +4,15 @@ const typeDefs = gql`
         NURSE
         PATIENT
     }
+    enum Severity {
+        MILD
+        SEVERE
+        CRITICAL
+      }
+  
+      enum Status {
+        ACTIVE
+        RESOLVED
+      }
 `
 module.exports = typeDefs

@@ -12,7 +12,7 @@ const typeDefs = gql`
         login(username: String!, password: String!): AuthPayload
         logout: Void
         addMotivationalTip(form: TipInput): Tip
-        addEmergencyAlert: EmergencyAlert
+        addEmergencyAlert(severity: String!): EmergencyAlert
         addChecklist(form: ChecklistInput): Checklist
     }
 `

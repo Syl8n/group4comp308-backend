@@ -41,7 +41,7 @@ const resolvers = {
     
       const memberId = args.memberId;
       const patient = await Member.findOne({_id : memberId}).exec()
-      const tips = await Tip.find({ member: patient._id }).exec();
+      const tips = await Tip.find({ member: patient._id }).sort({ createdAt: -1 }).exec();
       console.log('TIP LIST: ', tips)
       if (tips.length === 0) {
         return [];

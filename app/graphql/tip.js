@@ -1,5 +1,7 @@
 const { gql } = require('apollo-server-express')
 const Tip = require('../models/Tip')
+const Member = require('../models/Member')
+
 
 const typeDefs = gql`
     type Tip {
@@ -7,7 +9,7 @@ const typeDefs = gql`
       title: String
       tip: String
       member: Member
-      writer: Writer
+      writer: Member
       createdAt: Date
     }
     input TipInput{
@@ -39,8 +41,11 @@ const resolvers = {
       const tip = new Tip(
         args.form
       );
+      console.log('tip: ', tip)
       tip.member = await Member.findOne({ _id: args.form.memberId }).exec();
       tip.writer = await Member.findOne({ _id: writer._id }).exec();
+
+      console.log('member: ', tip.member)
       try {
         const doc = await tip.save();
         console.log(doc);

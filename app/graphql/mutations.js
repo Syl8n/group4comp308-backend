@@ -11,7 +11,7 @@ const typeDefs = gql`
         updateVitalSign(_id: ID, form: VitalSignInput): VitalSign
         login(username: String!, password: String!): AuthPayload
         logout: Void
-        addTip(tip: String): Tip
+        addMotivationalTip(form: TipInput): Tip
         addEmergencyAlert: EmergencyAlert
         addChecklist(form: ChecklistInput): Checklist
     }

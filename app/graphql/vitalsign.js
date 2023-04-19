@@ -34,6 +34,7 @@ const resolvers = {
   },
   Mutation: { 
     addVitalSign: async (parent, args, { req }) => {
+      console.log('req: ', req.user)
       const writer = req.user;
       if(!writer || !writer._id){
         throw new Error('Sign In first')

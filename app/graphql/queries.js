@@ -10,9 +10,11 @@ const typeDefs = gql`
       getMember(_id: ID!): Member
       getVitalSigns(_id: ID!, number: Int): [VitalSign]
       getTip: Tip
+      getTipsByMemberId(memberId: ID!): [Tip!]!
       getEmergencyAlerts(number: Int): [EmergencyAlert]
       getChecklists(_id: ID!): [Checklist]
       getLastChecklist(_id: ID!): Checklist
+   
     }
 `
 

@@ -30,6 +30,25 @@ const resolvers = {
       const tips = await Tip.find({}).exec();
       return tips[Math.floor(Math.random() * tips.length)];
     },
+    getTipsByMemberId: async (parent, args, { req }) => {
+      console.log('args: ', args)
+      if (!req.user) {
+        throw new Error('Sign in first');
+      }
+      if (req.user.role !== 'PATIENT') {
+        throw new Error('You are not a patient');
+      }
+    
+      const memberId = args.memberId;
+      const patient = await Member.findOne({_id : memberId}).exec()
+      const tips = await Tip.find({ member: patient._id }).exec();
+      console.log('TIP LIST: ', tips)
+      if (tips.length === 0) {
+        return [];
+      }
+    
+      return tips;
+    },
   },
   Mutation: { 
     addMotivationalTip: async (parent, args, {req}) => {

@@ -13,6 +13,7 @@ const typeDefs = gql`
         logout: Void
         addMotivationalTip(form: TipInput): Tip
         addEmergencyAlert(severity: String!): EmergencyAlert
+        resolveEmergencyAlert(alertId: ID!, resolution: String!): EmergencyAlert
         addChecklist(form: ChecklistInput): Checklist
     }
 `

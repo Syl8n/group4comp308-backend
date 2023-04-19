@@ -11,6 +11,7 @@ const typeDefs = gql`
       getVitalSigns(_id: ID!, number: Int): [VitalSign]
       getTip: Tip
       getTipsByMemberId(memberId: ID!): [Tip!]!
+      getEmergencyAlertById(id: ID!): EmergencyAlert
       getEmergencyAlerts(number: Int): [EmergencyAlert]
       getActiveEmergencyAlerts: [EmergencyAlert]
       getChecklists(_id: ID!): [Checklist]

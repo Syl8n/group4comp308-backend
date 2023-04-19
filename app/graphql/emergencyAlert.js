@@ -9,10 +9,31 @@ type EmergencyAlert {
   createdAt: Date
   severity: Severity
   status: Status
+  resolution: String
 }
 `
 const resolvers = {
   Query: {
+    getEmergencyAlertById: async (parent, args, { req }) => {
+      if (!req.user) {
+        throw new Error('Sign In first')
+      }
+      if (req.user.role != 'NURSE') {
+        throw new Error('You are not a nurse')
+      }
+
+      const { id } = args;
+      try {
+        const emergencyAlert = await EmergencyAlert.findById(id).exec();
+        if (!emergencyAlert) {
+          throw new Error('Emergency Alert not found');
+        }
+        return emergencyAlert;
+      } catch (err) {
+        console.error(err);
+        throw err;
+      }
+    },
     getEmergencyAlerts: async (parent, args, { req }) => {
       if (!req.user) {
         throw new Error('Sign In first')
@@ -54,6 +75,34 @@ const resolvers = {
       }
 
       return emergencyAlert;
+    },
+    resolveEmergencyAlert: async (parent, args, { req }) => {
+      // Ensure user is authenticated and has appropriate role
+      const user = req.user;
+      if (!user || user.role !== 'NURSE') {
+        throw new AuthenticationError('Not authorized');
+      }
+      const alertId = args.alertId;
+      const resolution = args.resolution;
+
+      // Find emergency alert by ID
+      const alert = await EmergencyAlert.findById(alertId);
+      if (!alert) {
+        throw new Error('Emergency alert not found');
+      }
+
+      // Set alert status to resolved and add resolution
+      alert.status = 'RESOLVED';
+      alert.resolution = resolution;
+
+      try {
+        const updatedAlert = await alert.save();
+        console.log(updatedAlert);
+        return updatedAlert;
+      } catch (err) {
+        console.error(err);
+        throw err;
+      }
     },
   }
 }

@@ -19,6 +19,10 @@ const schema = new Schema({
     type: String,
     enum: ['ACTIVE', 'RESOLVED'],
     default: 'ACTIVE'
+  },
+  resolution: {
+    type: String,
+    default: '',
   }
 });
 

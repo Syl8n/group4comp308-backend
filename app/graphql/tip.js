@@ -4,7 +4,16 @@ const Tip = require('../models/Tip')
 const typeDefs = gql`
     type Tip {
       _id: ID
+      title: String
       tip: String
+      member: Member
+      writer: Writer
+      createdAt: Date
+    }
+    input TipInput{
+      title: String
+      tip: String
+      memberId: ID
     }
 `
 const resolvers = {
@@ -21,21 +30,23 @@ const resolvers = {
     },
   },
   Mutation: { 
-    addTip: async (parent, args) => {
-      if(!req.user){
-        throw new Error('Sign in first')
+    addMotivationalTip: async (parent, args, {req}) => {
+      const writer = req.user;
+      if(!writer || !writer._id){
+        throw new Error('Sign In first')
       }
-      if(req.user.role != 'NURSE'){
-        throw new Error('You are not a nurse')
-      }
+
       const tip = new Tip(
-        args
+        args.form
       );
+      tip.member = await Member.findOne({ _id: args.form.memberId }).exec();
+      tip.writer = await Member.findOne({ _id: writer._id }).exec();
       try {
         const doc = await tip.save();
         console.log(doc);
       }catch(err){
         console.error(err);
+        console.log('here');
         throw err;
       }
       return tip;

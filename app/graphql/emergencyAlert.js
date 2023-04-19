@@ -25,6 +25,10 @@ const resolvers = {
         : await EmergencyAlert.find({}).populate('patient').sort({ _id: -1 }).limit(args.number).exec();
       return emergencyAlerts;
     },
+    getActiveEmergencyAlerts: async () => {
+      const activeAlerts = await EmergencyAlert.find({ status: 'ACTIVE' }).populate('patient').exec();
+      return activeAlerts;
+    },
   },
   Mutation: {
     addEmergencyAlert: async (parent, { severity }, { req }) => {

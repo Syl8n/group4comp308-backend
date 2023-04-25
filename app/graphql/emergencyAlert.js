@@ -1,6 +1,7 @@
 const { gql } = require('apollo-server-express')
 const EmergencyAlert = require('../models/EmergencyAlert')
 const Member = require('../models/Member')
+const subscribe = require('../utils/subscribe')
 
 const typeDefs = gql`
 type EmergencyAlert {
@@ -73,6 +74,8 @@ const resolvers = {
         console.error(err);
         throw err;
       }
+
+      subscribe.push();
 
       return emergencyAlert;
     },
